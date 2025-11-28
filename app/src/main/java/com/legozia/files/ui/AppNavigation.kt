@@ -5,10 +5,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.legozia.files.viewmodel.FileManagerViewModel
+import com.legozia.files.viewmodel.ThemeViewModel
 
 @Composable
 fun AppNavigation(
-    viewModel: FileManagerViewModel
+    viewModel: FileManagerViewModel,
+    themeViewModel: ThemeViewModel
 ) {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = "fileManager") {
@@ -23,7 +25,10 @@ fun AppNavigation(
             AnalyzeStorageScreen(onNavigateBack = { navController.popBackStack() })
         }
         composable("settings") {
-            SettingsScreen(onNavigateBack = { navController.popBackStack() })
+            SettingsScreen(
+                themeViewModel = themeViewModel,
+                onNavigateBack = { navController.popBackStack() }
+            )
         }
     }
 }
