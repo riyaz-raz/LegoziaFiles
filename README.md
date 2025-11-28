@@ -118,4 +118,4 @@ Potential features for future versions:
 
 ## License
 
-This project is created for educational purposes.
+[MIT License](LICENSE)
