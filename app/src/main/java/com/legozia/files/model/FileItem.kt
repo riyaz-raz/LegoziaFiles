@@ -12,8 +12,16 @@ data class FileItem(
     val isDirectory: Boolean = file.isDirectory,
     val size: Long = if (file.isDirectory) 0 else file.length(),
     val lastModified: Long = file.lastModified(),
-    val extension: String = if (file.isDirectory) "" else file.extension.lowercase()
+    val extension: String = if (file.isDirectory) "" else file.extension.lowercase(),
+    val isSelected: Boolean = false,
+    val isFavorite: Boolean = false
 ) {
+    val canRead: Boolean get() = file.canRead()
+    val canWrite: Boolean get() = file.canWrite()
+    val canExecute: Boolean get() = file.canExecute()
+    val isHidden: Boolean get() = file.isHidden || name.startsWith(".")
+    
+
     fun getFormattedSize(): String {
         if (isDirectory) return ""
         

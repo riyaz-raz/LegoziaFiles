@@ -14,8 +14,10 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.legozia.files.ui.AppNavigation
 import com.legozia.files.viewmodel.FileManagerViewModel
+import com.legozia.files.viewmodel.FileManagerViewModelFactory
 import com.legozia.files.viewmodel.ThemeViewModel
 import com.legozia.files.ui.theme.LegoziaFilesTheme
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,12 +35,14 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    val viewModel: FileManagerViewModel = viewModel()
+                    val factory = FileManagerViewModelFactory(applicationContext)
+                    val viewModel: FileManagerViewModel = viewModel(factory = factory)
                     AppNavigation(
                         viewModel = viewModel,
                         themeViewModel = themeViewModel
                     )
                 }
+
             }
         }
     }

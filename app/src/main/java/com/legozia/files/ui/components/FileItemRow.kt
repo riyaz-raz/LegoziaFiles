@@ -1,6 +1,7 @@
 package com.legozia.files.ui.components
 
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
@@ -8,24 +9,33 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.legozia.files.model.FileItem
-import com.legozia.files.model.FileType
-import com.legozia.files.ui.theme.FolderColor
+import com.legozia.files.util.FileIconProvider
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun FileItemRow(
     fileItem: FileItem,
+    isSelected: Boolean = false,
     onClick: () -> Unit,
+    onLongClick: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     Surface(
         modifier = modifier
             .fillMaxWidth()
-            .clickable(onClick = onClick),
-        tonalElevation = 0.dp
+            .combinedClickable(
+                onClick = onClick,
+                onLongClick = onLongClick
+            ),
+        tonalElevation = if (isSelected) 4.dp else 0.dp,
+        color = if (isSelected) {
+            MaterialTheme.colorScheme.primaryContainer
+        } else {
+            MaterialTheme.colorScheme.surface
+        }
     ) {
         Row(
             modifier = Modifier
@@ -33,12 +43,22 @@ fun FileItemRow(
                 .padding(horizontal = 16.dp, vertical = 12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
+            // Selection checkbox (shown when in selection mode)
+            if (isSelected) {
+                Checkbox(
+                    checked = true,
+                    onCheckedChange = null,
+                    modifier = Modifier.size(24.dp)
+                )
+                Spacer(modifier = Modifier.width(12.dp))
+            }
+            
             // File icon
             Icon(
-                imageVector = getFileIcon(fileItem.getFileType()),
+                imageVector = FileIconProvider.getIconForFileType(fileItem.getFileType()),
                 contentDescription = null,
                 modifier = Modifier.size(40.dp),
-                tint = if (fileItem.isDirectory) FolderColor else MaterialTheme.colorScheme.onSurfaceVariant
+                tint = FileIconProvider.getColorForFileType(fileItem.getFileType())
             )
             
             Spacer(modifier = Modifier.width(16.dp))
@@ -47,12 +67,28 @@ fun FileItemRow(
             Column(
                 modifier = Modifier.weight(1f)
             ) {
-                Text(
-                    text = fileItem.name,
-                    style = MaterialTheme.typography.bodyLarge,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    Text(
+                        text = fileItem.name,
+                        style = MaterialTheme.typography.bodyLarge,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier.weight(1f, fill = false)
+                    )
+                    
+                    // Favorite star
+                    if (fileItem.isFavorite) {
+                        Icon(
+                            imageVector = Icons.Default.Star,
+                            contentDescription = "Favorite",
+                            tint = MaterialTheme.colorScheme.tertiary,
+                            modifier = Modifier.size(16.dp)
+                        )
+                    }
+                }
                 
                 Spacer(modifier = Modifier.height(4.dp))
                 
@@ -75,8 +111,8 @@ fun FileItemRow(
                 }
             }
             
-            // Navigation arrow for folders
-            if (fileItem.isDirectory) {
+            // Navigation arrow for folders (hidden in selection mode)
+            if (fileItem.isDirectory && !isSelected) {
                 Icon(
                     imageVector = Icons.Default.ChevronRight,
                     contentDescription = "Navigate",
@@ -84,23 +120,5 @@ fun FileItemRow(
                 )
             }
         }
-    }
-}
-
-@Composable
-private fun getFileIcon(fileType: FileType): ImageVector {
-    return when (fileType) {
-        FileType.FOLDER -> Icons.Default.Folder
-        FileType.IMAGE -> Icons.Default.Image
-        FileType.VIDEO -> Icons.Default.VideoFile
-        FileType.AUDIO -> Icons.Default.AudioFile
-        FileType.PDF -> Icons.Default.PictureAsPdf
-        FileType.DOCUMENT -> Icons.Default.Description
-        FileType.SPREADSHEET -> Icons.Default.TableChart
-        FileType.PRESENTATION -> Icons.Default.Slideshow
-        FileType.ARCHIVE -> Icons.Default.FolderZip
-        FileType.APK -> Icons.Default.Android
-        FileType.CODE -> Icons.Default.Code
-        FileType.UNKNOWN -> Icons.Default.InsertDriveFile
     }
 }
