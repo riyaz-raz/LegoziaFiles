@@ -1,120 +1,85 @@
-# File Manager - Android App
+# Legozia File Manager
 
-A simple and elegant file manager application for Android built with Kotlin and Jetpack Compose.
+A modern, feature-rich file manager application for Android built with Kotlin and Jetpack Compose.
 
 ## Features
 
-- 📁 Browse files and folders on your device
-- 🔍 View file details (name, size, modified date)
-- 📂 Navigate through directory structure
-- 🎨 Material Design 3 UI with dynamic theming
-- 🌙 Dark mode support
-- 📱 Modern Jetpack Compose UI
-- 🔐 Proper storage permission handling
+- **📁 Comprehensive File Browsing**: Navigate through your device's storage with ease.
+- **📊 Storage Analysis**: Visualize storage usage with category breakdowns and identify large files.
+- **⚡ Quick Access**:
+  - **Recent Files**: Quickly access your most recently modified files.
+  - **Favorites**: Bookmark important files and folders for instant access.
+- **🛠️ File Operations**:
+  - Copy, Move, Delete, and Rename files and folders.
+  - Create new folders.
+  - **Zip/Unzip**: Compress files into archives and extract them.
+  - **Share**: Share files with other apps.
+- **🔍 Smart Sorting & Viewing**:
+  - Sort by Name, Size, Date, or Type.
+  - Switch between List and Grid view modes.
+- **🎨 Modern UI**:
+  - Material Design 3 implementation.
+  - Dynamic Dark/Light theme support.
+  - File type icons and previews.
+- **ℹ️ File Details**: View detailed properties of files (path, size, modified date, type).
 
 ## Technical Stack
 
 - **Language**: Kotlin
 - **UI Framework**: Jetpack Compose
 - **Architecture**: MVVM (Model-View-ViewModel)
-- **Minimum SDK**: 24 (Android 7.0)
-- **Target SDK**: 34 (Android 14)
-- **Material Design**: Material 3
+- **Dependency Injection**: Manual / ViewModelFactory
+- **Asynchronous Processing**: Coroutines & Flow
+- **Image Loading**: Coil
+- **Navigation**: Navigation Compose
+- **Permissions**: Accompanist Permissions
+- **Local Storage**: DataStore Preferences (for settings)
 
 ## Project Structure
 
 ```
-FileManager/
-├── app/
-│   ├── src/main/
-│   │   ├── java/com/example/filemanager/
-│   │   │   ├── data/
-│   │   │   │   └── FileRepository.kt
-│   │   │   ├── model/
-│   │   │   │   └── FileItem.kt
-│   │   │   ├── ui/
-│   │   │   │   ├── components/
-│   │   │   │   │   └── FileItemRow.kt
-│   │   │   │   ├── theme/
-│   │   │   │   │   ├── Color.kt
-│   │   │   │   │   ├── Theme.kt
-│   │   │   │   │   └── Type.kt
-│   │   │   │   └── FileManagerScreen.kt
-│   │   │   ├── viewmodel/
-│   │   │   │   └── FileManagerViewModel.kt
-│   │   │   └── MainActivity.kt
-│   │   ├── res/
-│   │   └── AndroidManifest.xml
-│   └── build.gradle.kts
-├── build.gradle.kts
-├── settings.gradle.kts
-└── gradle.properties
+com.legozia.files/
+├── data/               # Data sources and preferences
+│   ├── FilePreferences.kt
+│   └── ThemePreferences.kt
+├── model/              # Data models
+│   ├── FileItem.kt
+│   ├── FileOperation.kt
+│   └── ...
+├── repo/               # Repositories and business logic
+│   ├── FileRepository.kt
+│   └── FileOperations.kt
+├── ui/                 # UI Components (Screens & Widgets)
+│   ├── components/
+│   ├── theme/
+│   ├── FileManagerScreen.kt
+│   ├── AnalyzeStorageScreen.kt
+│   └── ...
+├── util/               # Utility classes
+│   ├── FileIconProvider.kt
+│   └── FileSizeCalculator.kt
+├── viewmodel/          # ViewModels
+│   ├── FileManagerViewModel.kt
+│   ├── StorageViewModel.kt
+│   └── ...
+└── MainActivity.kt
 ```
-
-## Key Components
-
-### Data Layer
-- **FileItem**: Data class representing files and folders with metadata
-- **FileRepository**: Handles file system operations and directory navigation
-
-### ViewModel Layer
-- **FileManagerViewModel**: Manages UI state and business logic
-- Handles navigation stack for back button functionality
-- Manages loading and error states
-
-### UI Layer
-- **FileManagerScreen**: Main screen with file list and navigation
-- **FileItemRow**: Individual file/folder item with icon and metadata
-- **Material Design 3 Theme**: Modern theming with dynamic colors
 
 ## Permissions
 
-The app requires storage permissions to access files:
+The app requires the following permissions to function correctly:
 - `READ_EXTERNAL_STORAGE` (Android 10 and below)
-- `MANAGE_EXTERNAL_STORAGE` (Android 11+)
+- `MANAGE_EXTERNAL_STORAGE` (Android 11+) - Required for full file access.
 
 ## Building the Project
 
-1. Open the project in Android Studio
-2. Sync Gradle files
-3. Build and run on an emulator or physical device
+1. Open the project in Android Studio.
+2. Sync Gradle files.
+3. Build and run on an emulator or physical device (Android 8.0+ recommended).
 
 ```bash
 ./gradlew build
 ```
-
-## Running the App
-
-1. Grant storage permissions when prompted
-2. Browse through your device's file system
-3. Tap on folders to navigate into them
-4. Use the back button to navigate to parent directories
-
-## File Type Support
-
-The app recognizes and displays appropriate icons for:
-- 📁 Folders
-- 🖼️ Images (jpg, png, gif, etc.)
-- 🎥 Videos (mp4, avi, mkv, etc.)
-- 🎵 Audio (mp3, wav, flac, etc.)
-- 📄 Documents (pdf, doc, txt, etc.)
-- 📊 Spreadsheets (xls, csv, etc.)
-- 📽️ Presentations (ppt, etc.)
-- 📦 Archives (zip, rar, etc.)
-- 🤖 APK files
-- 💻 Code files
-- 📋 Other files
-
-## Future Enhancements
-
-Potential features for future versions:
-- File operations (copy, move, delete, rename)
-- Search functionality
-- File sorting options
-- Multiple view modes (list, grid)
-- File preview
-- Share files
-- Favorites/bookmarks
 
 ## License
 
